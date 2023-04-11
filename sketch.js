@@ -15,7 +15,7 @@ function setup() {
 }
 
 function draw() {
-  ++iteration;
+  iteration += 3;
   background(0);
   
   // Draw middle line
