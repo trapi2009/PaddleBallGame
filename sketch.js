@@ -15,7 +15,6 @@ function setup() {
 }
 
 function draw() {
-  iteration += 3;
   background(0);
   
   // Draw middle line
@@ -39,11 +38,15 @@ function draw() {
   if(ballX < 30 && ballY > playerY - 50 && ballY < playerY + 50) {
     ballXSpeed *= -1.1;
     ballYSpeed *= 1.1;
+    iteration += 10;
+
   }
   
   if(ballX > width - 30 && ballY > aiY - 40 && ballY < aiY + 40) {
     ballXSpeed *= -1.1;
     ballYSpeed *= 1.1;
+      iteration += 10;
+
   }
   
   // Check ball collision with score walls
