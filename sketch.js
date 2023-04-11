@@ -70,7 +70,7 @@ function draw() {
   text(playerScore + " - " + aiScore, width / 2, 40);
   
   // Move AI paddle
-  aiY += (ballY - aiY) * aiSpeed / 100;
+  aiY += (ballY - aiY) * aiSpeed / 10;
   aiY = constrain(aiY, 40, height - 40);
   
   // Move player paddle
