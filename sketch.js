@@ -1,102 +1,104 @@
-let playerY, aiY, ballX, ballY, ballXSpeed, ballYSpeed, playerScore, aiScore, aiSpeed, iteration;
+//create the ball sprite
+var ball = createSprite(200,200,10,10);
+ball.setAnimation("soccer_yellow_1");
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  playerY = height / 2;
-  aiY = height / 2;
-  ballX = width / 2;
-  ballY = height / 2;
-  ballXSpeed = 5;
-  ballYSpeed = 5;
-  playerScore = 0;
-  aiScore = 0;
-  aiSpeed = 21;
-  iteration = 0;
-}
+//create Player Paddle Sprite on the right edge
+var playerPaddle = createSprite(390,200,10,100);
+playerPaddle.shapeColor = "red";
+
+//create Computer Paddle sprite on the left edge
+var playerPaddleai = createSprite(9,9,10,100);
+playerPaddleai.shapeColor = "purple";
+
+//variable to store different state of game
+var gameState = "serve";
+
+//variables to keep the score
+var compScore = 0;
+var playerScore = 0;
+
+//create edge boundaries
+createEdgeSprites();
+ball.bounceOff(playerPaddle);
 
 function draw() {
-  background(0);
-  
-  // Draw middle line
-  stroke(255);
-  line(width / 2, 0, width / 2, height);
-  
-  // Draw paddles
-  rect(20, playerY - 50, 10, 100);
-  rect(width - 30, aiY - 40, 10, 80);
-  
-  // Update ball position
-  ballX += ballXSpeed + iteration;
-  ballY += ballYSpeed + iteration;
-  
-  // Check ball collision with walls
-  if(ballY < 0 || ballY > height) {
-    ballYSpeed *= -1;
-  }
-  
-  // Check ball collision with paddles
-  if(ballX < 30 && ballY > playerY - 50 && ballY < playerY + 50) {
-    ballXSpeed *= -1.1;
-    ballYSpeed *= 1.1;
-    iteration += 10;
+//clear the screen
+background("white");
+textSize(20);
 
-  }
-  
-  if(ballX > width - 30 && ballY > aiY - 40 && ballY < aiY + 40) {
-    ballXSpeed *= -1.1;
-    ballYSpeed *= 1.1;
-      iteration += 10;
 
-  }
-  
-  // Check ball collision with score walls
-  if(ballX < 0) {
-    aiScore++;
-    resetBall();
-  }
-  
-  if(ballX > width) {
-    playerScore++;
-    resetBall();
-  }
-  
-  // Draw ball
-  ellipse(ballX, ballY, 20);
-  
-  // Draw score
-  textAlign(CENTER);
-  textSize(32);
-  fill(255);
-  text(playerScore + " - " + aiScore, width / 2, 40);
-  
-  // Move AI paddle
-  aiY += (ballY - aiY) * aiSpeed / 100;
-  aiY = constrain(aiY, 40, height - 40);
-  
-  // Move player paddle
-  playerY = mouseY;
-  playerY = constrain(playerY, 50, height - 50);
-  
-  // Check if there is a winner
-  if (playerScore === 7) {
-    textSize(64);
-    fill(0, 255, 0);
-    textAlign(CENTER);
-    text("You win!", width / 2, height / 2);
-    noLoop();
-  } else if (aiScore === 7) {
-    textSize(64);
-    fill(255, 0, 0);
-    textAlign(CENTER);
-    text("You lose!", width / 2, height / 2);
-    noLoop();
-  }
+//place info text in the center
+if (gameState == "serve") {
+text("Mouse press to Serve",120,180);
+}
+//display scores
+text(compScore, 170,20);
+text(playerScore, 230,20);
+
+//make the player paddle move with the mouse's y position
+playerPaddle.y = World.mouseY;
+
+//AI for the computer paddle
+//make it move with the ball's y position
+playerPaddleai.y = ball.y;
+
+//make the ball bounce with the top and the bottom edges
+ball.bounceOff(edges[2]);
+ball.bounceOff(edges[3]);
+
+//bounce ball from player paddle
+ball.bounceOff(playerPaddle);
+
+//bounce ball from computer paddle.
+ball.bounceOff(playerPaddleai);
+
+drawSprites();
+
+//reset the ball to the center if it crosses the screen
+if(ball.x > 395 || ball.x <5) {
+
+
+if(ball.x > 395) {
+  compScore = compScore + 1; //increase computer score
 }
 
-function resetBall() {
-  ballX = width / 2;
-  ballY = height / 2;
-  ballXSpeed = 5;
-  ballYSpeed = 5;
+if(ball.x < 5) {
+  playerScore = playerScore + 1; //increase player score
 }
-a
+
+reset();
+gameState = "serve";
+}
+
+if (playerScore == 5 || compScore == 5){
+gameState = "over";
+
+
+if (playerScore == 5) {
+  text("Game Over you rock!",160,160);
+}
+
+if (compScore == 5) {
+  text("Game Over you suck!",160,160);
+}
+}
+
+//increase the velocity of ball in each pass
+ball.velocityX *= 1.005;
+ball.velocityY *= 1.005;
+}
+
+function mousePressed() {
+ball.velocityX = 4;
+ball.velocityY = 3;
+gameState ="play";
+}
+
+function reset() {
+ball.x = 200;
+ball.y = 200;
+ball.velocityX = 0;
+ball.velocityY = 0;
+}
+
+
