@@ -1,4 +1,4 @@
-let playerY, aiY, ballX, ballY, ballXSpeed, ballYSpeed, playerScore, aiScore, aiSpeed;
+let playerY, aiY, ballX, ballY, ballXSpeed, ballYSpeed, playerScore, aiScore, aiSpeed, iteration;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -11,9 +11,11 @@ function setup() {
   playerScore = 0;
   aiScore = 0;
   aiSpeed = 20;
+  iteration = 0;
 }
 
 function draw() {
+  ++iteration;
   background(0);
   
   // Draw middle line
@@ -25,8 +27,8 @@ function draw() {
   rect(width - 30, aiY - 40, 10, 80);
   
   // Update ball position
-  ballX += ballXSpeed;
-  ballY += ballYSpeed;
+  ballX += ballXSpeed + iteration;
+  ballY += ballYSpeed + iteration;
   
   // Check ball collision with walls
   if(ballY < 0 || ballY > height) {
