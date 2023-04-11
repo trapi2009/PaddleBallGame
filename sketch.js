@@ -10,7 +10,7 @@ function setup() {
   ballYSpeed = 5;
   playerScore = 0;
   aiScore = 0;
-  aiSpeed = 30;
+  aiSpeed = 210;
   iteration = 0;
 }
 
